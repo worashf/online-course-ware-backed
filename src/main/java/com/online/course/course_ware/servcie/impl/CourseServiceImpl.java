@@ -12,6 +12,7 @@ import com.online.course.course_ware.servcie.CourseService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -76,13 +77,17 @@ private CourseDao courseDao;
         return listCourse;
     }
 
+    @Transactional
     @Override
     public List<Course> listCoursesByCategoryId(Long categoryId) {
+            List<Course> listCourse =null;
         try {
+            listCourse = courseDao.getAllCourseByCategoryId(categoryId);
             
         } catch (Exception e) {
+            listCourse = null;
         }
-        return  null;
+        return  listCourse;
     }
     
 }

@@ -56,7 +56,11 @@ public class CourseController {
    List<Course> listCourse = courseService.listCourses();
    return  ResponseEntity.ok().body(listCourse);
  }
-
+ @GetMapping("/courses/{cateoryId}")
+ public  ResponseEntity<List<Course>> ListAllCoursesByCategory(@PathVariable Long categoryId){
+   List<Course> listCourse = courseService.listCoursesByCategoryId(categoryId);
+   return  ResponseEntity.ok().body(listCourse);
+ }
    @DeleteMapping("/courses/{courseId}")
  public ResponseEntity<Map<String, Boolean>> deleteCourse(@PathVariable  Long courseId){
           
