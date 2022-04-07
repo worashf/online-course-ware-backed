@@ -5,8 +5,10 @@
 package com.online.course.course_ware.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 
@@ -19,6 +21,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -46,6 +50,55 @@ public class User implements  Serializable{
     private String status;
     @Column(name = "email")
     private String  email;
+    @Column(name = "isTeacher")
+    private Boolean isTeacher;
+     @Column(name = "isAuthor")
+    private Boolean isAuthor;
+    
+      @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Course> courses;
+      
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Request> requests;
+
+      
+        
+
+    public Boolean getIsTeacher() {
+        return isTeacher;
+    }
+ 
+    @JsonManagedReference(value = "user-request")
+   
+      
+    public List<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
+    }
+
+    public void setIsTeacher(Boolean isTeacher) {
+        this.isTeacher = isTeacher;
+    }
+
+    public Boolean getIsAuthor() {
+        return isAuthor;
+    }
+
+    public void setIsAuthor(Boolean isAuthor) {
+        this.isAuthor = isAuthor;
+    }
+ @JsonManagedReference(value = "course-user")
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+      
 
    @JsonIgnore
        @ManyToMany(fetch = FetchType.EAGER,

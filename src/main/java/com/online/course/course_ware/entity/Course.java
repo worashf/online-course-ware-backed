@@ -5,7 +5,9 @@
 package com.online.course.course_ware.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,7 +17,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
 /**
@@ -39,24 +44,82 @@ public class Course implements  Serializable{
     private  String objective;
     @Column(name ="star")
     private int star;
+    @Column(name ="thumbnail")
+    private String thumbnail;
+  
     @Column(name ="requirements")
     @Lob
     private String requirements;
     @Column(name = "price")
     private Double price;
+      @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name ="user_id")
+    private User user;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name ="category_id")
+    private Category category;
+   @OneToMany(mappedBy ="course",fetch = FetchType.LAZY)
+    private List<Request> requests;
+   
+   @OneToMany(mappedBy ="course",fetch = FetchType.LAZY)
+    private List<Topic> topics;
+
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+   
+   
+   
+    @JsonManagedReference(value = "course-topic")
+    public List<Topic> getTopics() {
+        return topics;
+    }
+
+    public void setTopics(List<Topic> topics) {
+        this.topics = topics;
+    }
+   
+      
+      
+      
+      @JsonManagedReference(value = "course-request")
+    public List<Request> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
+    }
+
+  
+  
+   
+   
     public Double getPrice() {
         return price;
     }
+
     public void setPrice(Double price) {
         this.price = price;
     }
-    
-    
+    @JsonBackReference(value = "course-user")
+    public User getUser() {
+        return user;
+    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="category_id")
-    private Category category;
+    public void setUser(User user) {
+        this.user = user;
+    }
 
+  
+  
+  
     @JsonBackReference(value = "course-category")
     public Category getCategory() {
         return category;
@@ -114,6 +177,10 @@ public class Course implements  Serializable{
         this.requirements = requirements;
     }
     
-    
+    @Transient
+    public String getThumbnailPath(){
+        if(thumbnail == null || courseId ==null) return  null;
+        return "/courses-thumbnail/" + courseId + "/" +thumbnail;
+    }
     
 }

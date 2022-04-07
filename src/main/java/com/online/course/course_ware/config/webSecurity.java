@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
 
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,8 +35,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 
 /**
  *
@@ -67,13 +68,24 @@ public class webSecurity extends WebSecurityConfigurerAdapter{
             http.cors()
             .configurationSource(corsConfigurationSource()).and().csrf().disable();
             http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-            http.authorizeRequests().antMatchers("/api/login/**").permitAll();
-            http.authorizeRequests().antMatchers("/api/checktoken/**").permitAll();
+            http.authorizeRequests().antMatchers("/api/login/**","/api/courses/**", "/api/topics/**").permitAll();
+            http.authorizeRequests().antMatchers(GET,"/api/courses/**").permitAll();
+
+            http.authorizeRequests().antMatchers("/api/checktoken/**","/api/courses/image/**","/api/user/requests/**").permitAll();
+             http.authorizeRequests().antMatchers(GET,"/api/categories/**").permitAll();
             http.authorizeRequests().antMatchers(GET,"/api/users/**").hasAnyAuthority("Admin");
+            http.authorizeRequests().antMatchers(GET,"/api/requests/**").hasAnyAuthority("Admin");
+       http.authorizeRequests().antMatchers(GET,"/api/your/courses/**").hasAnyAuthority("Teacher");
+       http.authorizeRequests().antMatchers(GET,"/api/course/requests/**").hasAnyAuthority("Admin");
+       http.authorizeRequests().antMatchers(GET,"/api/user/requests/**").hasAnyAuthority("Admin");
+       http.authorizeRequests().antMatchers(PUT,"/api/courses/**").hasAnyAuthority("Teacher");
+       http.authorizeRequests().antMatchers(POST,"/api/course/upload/**").hasAnyAuthority("Teacher");
+
+     http.authorizeRequests().antMatchers(POST,"/api/requests/approve/**").hasAnyAuthority("Admin");
                http.authorizeRequests().antMatchers(POST,"/api/users/**").hasAnyAuthority("ADMIN");
             http.authorizeRequests().anyRequest().authenticated();
            http.addFilter(customAuthentication);
-           http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
         }
    	@Bean
 	@Override

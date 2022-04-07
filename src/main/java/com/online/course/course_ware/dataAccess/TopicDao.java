@@ -5,7 +5,10 @@
 package com.online.course.course_ware.dataAccess;
 
 import com.online.course.course_ware.entity.Topic;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,5 +17,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface TopicDao extends JpaRepository<Topic, Long>{
+   @Query("SELECT t FROM Topic t  JOIN   t.course c  WHERE c.courseId =:courseId")
+   List<Topic>  getAllTopicByCourseId(@Param (value ="courseId") Long courseId); 
+    
+    
     
 }

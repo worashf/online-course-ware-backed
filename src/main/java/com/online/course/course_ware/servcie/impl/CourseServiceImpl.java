@@ -13,6 +13,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -42,14 +43,16 @@ private CourseDao courseDao;
     }
 
     @Override
-    public Course updatCourse(Long categoryId, Long courseId, Course course) {
-         Category cate = null;
+    public Course updatCourse(Long courseId, Course course) {
+        
          Course co = null;
         try {
-             cate = catDao.getById(categoryId);
+
              co = courseDao.getById(courseId);
-             co.setCategory(cate);
              co.setCourseName(course.getCourseName());
+             co.setDescription(course.getDescription());
+             co.setObjective(course.getObjective());
+             co.setRequirements(course.getRequirements());
              co = courseDao.save(co);
         } catch (Exception e) {
             co =null;
@@ -89,5 +92,37 @@ private CourseDao courseDao;
         }
         return  listCourse;
     }
+
+    @Override
+    public List<Course> listCoursesByUser(String userName) {
+              List<Course> listCourse =null;
+        try {
+            listCourse = courseDao.getAllCourseByUserName(userName);
+            
+        } catch (Exception e) {
+            listCourse = null;
+        }
+        return  listCourse;
+    }
+
+    @Override
+    public String uploadCourseThumbnail(Long courseId, MultipartFile file) {
+       Course course = null;
+       String message = null;
+       try {
+             course = courseDao.getById(courseId);
+//              course.setThumbnail(filePath);
+              course = courseDao.save(course);
+              message ="success";
+        } catch (Exception e) {
+            course =null;
+            message="error";
+        }
+       return message;
+    
+    }
+
+    
+   
     
 }

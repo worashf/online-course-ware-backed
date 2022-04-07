@@ -17,6 +17,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CourseDao extends JpaRepository<Course, Long>{
-       @Query("SELECT co FROM Course co  JOIN  co.cateory c  WHERE c.categoryId =:categoryId")
+       @Query("SELECT co FROM Course  co  JOIN  co.category c  WHERE c.categoryId =:categoryId")
      List<Course>  getAllCourseByCategoryId(@Param (value ="categoryId") Long categoryId); 
+          @Query("SELECT co FROM Course  co  JOIN  co.user u  WHERE u.userName =:userName")
+     List<Course>  getAllCourseByUserName(@Param (value ="userName") String userName); 
 }

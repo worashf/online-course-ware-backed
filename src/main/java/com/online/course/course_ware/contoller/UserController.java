@@ -63,7 +63,7 @@ public ResponseEntity<User>  saveUser(@PathVariable Long roleId,@RequestBody Use
 
   @PostMapping("/checktoken/{token}")
  public  ResponseEntity<TokenResponse> ListAllUser(@PathVariable String  token){
-                 System.out.print(token);
+//                 System.out.print(token);
                    TokenResponse tokenResponse = new TokenResponse();
                     Algorithm algo = Algorithm.HMAC256("secret".getBytes());
                     JWTVerifier verfier = JWT.require(algo).build();
