@@ -39,7 +39,7 @@ public class UserController {
 
     
      
-    @PostMapping("/users/{roleId}")
+    @PostMapping("/users/save/{roleId}")
        
 public ResponseEntity<User>  saveUser(@PathVariable Long roleId,@RequestBody User user){
       User  ur = userService.saveUser(roleId,user);
@@ -50,6 +50,15 @@ public ResponseEntity<User>  saveUser(@PathVariable Long roleId,@RequestBody Use
         return ResponseEntity.accepted().headers(headers).body(ur);
     }
     
+    @PostMapping("/users/{studentId}")
+       
+public ResponseEntity<User>  saveStudentUser(@PathVariable Long studentId,@RequestBody User user){
+      User  ur = userService.saveStudentUser(studentId, user);
+       
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Responded", "UserController");
+        return ResponseEntity.accepted().headers(headers).body(ur);
+    }
         @PutMapping("/users/{userId}")
     public ResponseEntity<User> updateUser(@PathVariable Long userId,@RequestBody User user){
         User ur = userService.updatUser(userId, user);

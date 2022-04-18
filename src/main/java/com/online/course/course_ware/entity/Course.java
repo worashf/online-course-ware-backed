@@ -5,9 +5,12 @@
 package com.online.course.course_ware.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -29,9 +33,12 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name ="course")
-public class Course implements  Serializable{
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
+public class Course implements Serializable{
+
+
+        @Id
+        @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name ="course_id")
     private Long courseId;
     @Column(name ="course_name")
@@ -64,8 +71,30 @@ public class Course implements  Serializable{
    
    @OneToMany(mappedBy ="course",fetch = FetchType.LAZY)
     private List<Topic> topics;
+    @ManyToMany(mappedBy = "courses",fetch = FetchType.LAZY)
+    private Set<Student> students;
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+
+    
+    @JsonIgnore
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
 
 
+
+  
     public String getThumbnail() {
         return thumbnail;
     }
@@ -129,13 +158,7 @@ public class Course implements  Serializable{
         this.category = category;
     }
     
-    public Long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
-    }
+  
 
     public String getCourseName() {
         return courseName;
@@ -176,11 +199,7 @@ public class Course implements  Serializable{
     public void setRequirements(String requirements) {
         this.requirements = requirements;
     }
+
     
-    @Transient
-    public String getThumbnailPath(){
-        if(thumbnail == null || courseId ==null) return  null;
-        return "/courses-thumbnail/" + courseId + "/" +thumbnail;
-    }
     
 }

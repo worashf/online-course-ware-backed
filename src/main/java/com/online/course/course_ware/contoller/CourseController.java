@@ -12,6 +12,7 @@ import com.online.course.course_ware.servcie.CourseService;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,8 +38,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.ByteArrayResource;
 
 /**
  *
@@ -71,10 +75,15 @@ public class CourseController {
     }
 
  @GetMapping("/courses")
-					
- public  ResponseEntity<List<Course>> ListAllCourses(){
+public  ResponseEntity<List<Course>> ListAllCourses(){
    List<Course> listCourse = courseService.listCourses();
    return  ResponseEntity.ok().body(listCourse);
+ }
+ @GetMapping("/courses-id/{courseId}")
+public  ResponseEntity<Course> getCourse(@PathVariable Long courseId){
+  Course course = courseService.findCourse(courseId);
+     System.out.println(courseId);
+   return  ResponseEntity.ok().body(course);
  }
  
   @GetMapping("/courses/{categoryId}")
@@ -87,6 +96,14 @@ public class CourseController {
  public  ResponseEntity<List<Course>> ListAllCoursesByuser(@PathVariable String userName){
    List<Course> listCourse = courseService.listCoursesByUser(userName);
       
+   return  ResponseEntity.ok().body(listCourse);
+ }
+ 
+   @GetMapping("/courses/student/{userName}")
+ public  ResponseEntity<List<Course>> ListAllCoursesByStudentId(@PathVariable String userName){
+   System.out.println(userName);
+     List<Course> listCourse = courseService.listCoursesByStudent(userName);
+       
    return  ResponseEntity.ok().body(listCourse);
  }
    @DeleteMapping("/courses/{courseId}")
@@ -139,16 +156,25 @@ public class CourseController {
 }
   @RequestMapping(value = "/courses/image/{courseId}", method = RequestMethod.GET,
             produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> getImage(HttpServletResponse response,@PathVariable Long courseId) throws IOException {
+    public  ResponseEntity< ?>  getImage(HttpServletResponse response,
+            @PathVariable Long courseId) throws IOException {
         Course cou = couDao.getById(courseId);
       System.out.println(courseId);
-        String path = cou.getThumbnailPath();
-        System.out.println(path);
-        ClassPathResource imgFile = new ClassPathResource(path);
-         
-byte[] imageBytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
-      System.out.println(imageBytes.toString());
-		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
+        String uploadDir = "courses-thumbnail/"+cou.getCourseId();
+        String fileName = cou.getThumbnail();
+           Path uploadPath = Paths.get(uploadDir);
+             Path filePath = uploadPath.resolve(fileName);
+        System.out.println(filePath.toFile().getAbsolutePath());
+        ClassPathResource imgFile = new ClassPathResource(uploadDir +fileName);
+    ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(filePath));
+      System.out.println(resource.contentLength());
+     
+   
+      return ResponseEntity
+                        .ok()
+                        .contentLength(filePath.toFile().length())
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(resource);  
     }
  
  

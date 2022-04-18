@@ -5,7 +5,10 @@
 package com.online.course.course_ware.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -33,7 +37,17 @@ public class Topic implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="course_id")
     private Course course;
-    
+     @OneToMany(mappedBy = "topic",cascade = CascadeType.ALL)
+     private List<Material> materials;
+    @JsonManagedReference(value = "topic-material")
+    public List<Material> getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(List<Material> materials) {
+        this.materials = materials;
+    }
+     
     @JsonBackReference(value = "course-topic")
     public Course getCourse() {
         return course;

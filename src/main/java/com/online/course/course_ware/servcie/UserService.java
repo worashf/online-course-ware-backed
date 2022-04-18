@@ -13,6 +13,7 @@ import java.util.List;
  */
 public interface UserService {
        public User saveUser ( Long roleId ,User user);
+       public User saveStudentUser(Long studentId, User user);
     public User updatUser(Long userId,User user);
     public  void    deleteUser(Long userId);
     public  List<User> listUsers();

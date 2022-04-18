@@ -21,4 +21,8 @@ public interface CourseDao extends JpaRepository<Course, Long>{
      List<Course>  getAllCourseByCategoryId(@Param (value ="categoryId") Long categoryId); 
           @Query("SELECT co FROM Course  co  JOIN  co.user u  WHERE u.userName =:userName")
      List<Course>  getAllCourseByUserName(@Param (value ="userName") String userName); 
+     
+ @Query("SELECT c FROM Course c  LEFT OUTER JOIN  c.students s  WHERE s.studentId =:studentId")
+  List<Course>  getCourseByStudentId(@Param (value ="studentId") Long studentId); 
+     public Course  findByCourseId(Long courseId);
 }

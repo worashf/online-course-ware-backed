@@ -68,25 +68,27 @@ public class webSecurity extends WebSecurityConfigurerAdapter{
             http.cors()
             .configurationSource(corsConfigurationSource()).and().csrf().disable();
             http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-            http.authorizeRequests().antMatchers("/api/login/**","/api/courses/**", "/api/topics/**").permitAll();
-            http.authorizeRequests().antMatchers(GET,"/api/courses/**").permitAll();
-
-            http.authorizeRequests().antMatchers("/api/checktoken/**","/api/courses/image/**","/api/user/requests/**").permitAll();
-             http.authorizeRequests().antMatchers(GET,"/api/categories/**").permitAll();
-            http.authorizeRequests().antMatchers(GET,"/api/users/**").hasAnyAuthority("Admin");
-            http.authorizeRequests().antMatchers(GET,"/api/requests/**").hasAnyAuthority("Admin");
-       http.authorizeRequests().antMatchers(GET,"/api/your/courses/**").hasAnyAuthority("Teacher");
-       http.authorizeRequests().antMatchers(GET,"/api/course/requests/**").hasAnyAuthority("Admin");
-       http.authorizeRequests().antMatchers(GET,"/api/user/requests/**").hasAnyAuthority("Admin");
-       http.authorizeRequests().antMatchers(PUT,"/api/courses/**").hasAnyAuthority("Teacher");
-       http.authorizeRequests().antMatchers(POST,"/api/course/upload/**").hasAnyAuthority("Teacher");
-
-     http.authorizeRequests().antMatchers(POST,"/api/requests/approve/**").hasAnyAuthority("Admin");
-               http.authorizeRequests().antMatchers(POST,"/api/users/**").hasAnyAuthority("ADMIN");
-            http.authorizeRequests().anyRequest().authenticated();
+//            http.authorizeRequests().antMatchers("/api/login/**","/api/courses/**", "/api/topics/**","/api/students/**","/api/users/save/**").permitAll();
+//            http.authorizeRequests().antMatchers(GET,"/api/courses/**").permitAll();
+//
+//            http.authorizeRequests().antMatchers("/api/checktoken/**","/api/courses/image/**","/api/roles/**","/api/user/requests/**").permitAll();
+//             http.authorizeRequests().antMatchers(GET,"/api/categories/**").permitAll();
+//            http.authorizeRequests().antMatchers(GET,"/api/users/**").hasAnyAuthority("Admin");
+//            http.authorizeRequests().antMatchers(GET,"/api/requests/**").hasAnyAuthority("Admin");
+//       http.authorizeRequests().antMatchers(GET,"/api/your/courses/**").hasAnyAuthority("Teacher");
+//       http.authorizeRequests().antMatchers(GET,"/api/course/requests/**").hasAnyAuthority("Admin");
+//       http.authorizeRequests().antMatchers(GET,"/api/user/requests/**").hasAnyAuthority("Admin");
+//       http.authorizeRequests().antMatchers(PUT,"/api/courses/**").hasAnyAuthority("Teacher");
+//       http.authorizeRequests().antMatchers(POST,"/api/course/upload/**","/api/roles/**").hasAnyAuthority("Student");
+//
+//     http.authorizeRequests().antMatchers(POST,"/api/requests/approve/**").hasAnyAuthority("Admin");
+//              // http.authorizeRequests().antMatchers(POST,"/api/users/**").hasAnyAuthority("Teacher","Admin");
+            http.authorizeRequests().anyRequest().permitAll();
            http.addFilter(customAuthentication);
-        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-        }
+        //http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+ 
+   }
+   
    	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {

@@ -17,7 +17,7 @@ import javax.persistence.Table;
  * @author deva
  */
 @Entity
-@Table(name ="role_table")
+@Table(name ="roles")
 public class Role  implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

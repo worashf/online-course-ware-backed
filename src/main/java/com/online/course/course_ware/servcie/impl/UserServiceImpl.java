@@ -5,8 +5,10 @@
 package com.online.course.course_ware.servcie.impl;
 
 import com.online.course.course_ware.dataAccess.RoleDao;
+import com.online.course.course_ware.dataAccess.StudentDao;
 import com.online.course.course_ware.dataAccess.UserDao;
 import com.online.course.course_ware.entity.Role;
+import com.online.course.course_ware.entity.Student;
 import com.online.course.course_ware.entity.User;
 import com.online.course.course_ware.servcie.UserService;
 import java.util.ArrayList;
@@ -33,10 +35,15 @@ public class UserServiceImpl implements UserService,UserDetailsService{
     private UserDao  userDao;
     @Autowired
     private RoleDao roleDao;
+        @Autowired
+private PasswordEncoder encoder;
+        
+        @Autowired
+        private StudentDao studDao;
     @Override
     public User saveUser(Long roleId,User user) {
         
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
          Role role = roleDao.getById(roleId);
           System.out.println(role);
         try {
@@ -92,6 +99,24 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 					authList);
     }
   
+    }
+
+    @Override
+    public User saveStudentUser(Long studentId, User user) {
+      Student stud = studDao.getById(studentId);
+      Role role = roleDao.findByRoleName("Student");
+        try {
+              user.setStudent(stud);
+              user.setPassword(encoder.encode(user.getPassword()));
+              user.setStatus("enabled");
+              user.addRole(role);
+              user = userDao.save(user);
+            
+        } catch (Exception e) {
+            user =null;
+        }
+        
+        return user;
     }
     
 }

@@ -4,6 +4,7 @@
  */
 package com.online.course.course_ware.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
@@ -21,6 +22,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -31,7 +33,7 @@ import javax.persistence.Table;
  * @author deva
  */
 @Entity
-@Table(name ="user_table")
+@Table(name ="users")
 public class User implements  Serializable{
     
     @Id
@@ -60,8 +62,18 @@ public class User implements  Serializable{
       
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Request> requests;
+   
+     @OneToOne
+     @JoinColumn(name = "student_id")
+    private Student student;
+   @JsonBackReference(value = "student-user")
+   public Student getStudent() {
+        return student;
+    }
 
-      
+    public void setStudent(Student student) {
+       this.student = student;
+    } 
         
 
     public Boolean getIsTeacher() {

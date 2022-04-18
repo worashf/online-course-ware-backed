@@ -6,8 +6,12 @@ package com.online.course.course_ware.servcie.impl;
 
 import com.online.course.course_ware.dataAccess.CategoryDao;
 import com.online.course.course_ware.dataAccess.CourseDao;
+import com.online.course.course_ware.dataAccess.StudentDao;
+import com.online.course.course_ware.dataAccess.UserDao;
 import com.online.course.course_ware.entity.Category;
 import com.online.course.course_ware.entity.Course;
+import com.online.course.course_ware.entity.Student;
+import com.online.course.course_ware.entity.User;
 import com.online.course.course_ware.servcie.CourseService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,10 @@ public class CourseServiceImpl implements CourseService{
 private CategoryDao catDao;
 @Autowired
 private CourseDao courseDao;
+@Autowired
+private UserDao userDao;
+@Autowired
+private StudentDao studDao;
 
     
     @Override
@@ -119,6 +127,36 @@ private CourseDao courseDao;
             message="error";
         }
        return message;
+    
+    }
+
+    @Override
+    public List<Course> listCoursesByStudent(String userName) {
+            List<Course> listCourse =null;
+             User user = userDao.findByUserName(userName);
+            Student stud = studDao.getStudentByUserId(user.getUserId());
+        try {
+            listCourse = courseDao.getCourseByStudentId(stud.getStudentId());
+             System.out.println(user.getUserId());
+             System.out.println(stud.getStudentId());
+             System.out.println(listCourse);
+             
+        } catch (Exception e) {
+            listCourse = null;
+        }
+        return  listCourse; 
+    
+    }
+
+    @Override
+    public Course findCourse(Long courseId) {
+        Course cou =null;
+        try {
+            cou = courseDao.findByCourseId(courseId);
+        } catch (Exception e) {
+            cou =null;
+        }
+     return  cou;
     
     }
 

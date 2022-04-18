@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -32,9 +33,11 @@ public class TopicController {
     @Autowired
    private TopicService topicService;
     
-    @PostMapping("/topics/{courseId}")
+   
+    @RequestMapping(value = "/topics/{courseId}", method = RequestMethod.POST, 
+       produces = "application/json", consumes = "application/json")
     public ResponseEntity<Topic> createTopic(@PathVariable Long courseId,@RequestBody Topic topic){
-            Topic top  = topicService.saveTopic(courseId, topic);
+        Topic top  = topicService.saveTopic(courseId, topic);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Responded", "TopicController");
         return ResponseEntity.accepted().headers(headers).body(top);

@@ -15,9 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 public interface CourseService {
     public Course saveCourse(Long categoryId,Course course);
     public Course updatCourse( Long courseId,Course course);
+    public Course findCourse(Long courseId);
     public  void    deleteCourse(Long courseId);
     public  List<Course> listCourses();
     public  List<Course> listCoursesByCategoryId(Long categoryId);
       public  List<Course> listCoursesByUser(String userName);
+        public  List<Course> listCoursesByStudent(String userName);
       public String  uploadCourseThumbnail(Long courseId, MultipartFile file);
 }
