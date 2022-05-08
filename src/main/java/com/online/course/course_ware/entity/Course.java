@@ -73,6 +73,9 @@ public class Course implements Serializable{
     private List<Topic> topics;
     @ManyToMany(mappedBy = "courses",fetch = FetchType.LAZY)
     private Set<Student> students;
+    @OneToMany(mappedBy = "course",fetch = FetchType.LAZY)
+    private Set<QuestionCategory> questionCategoris;
+    
 
     public Long getCourseId() {
         return courseId;
@@ -199,6 +202,16 @@ public class Course implements Serializable{
     public void setRequirements(String requirements) {
         this.requirements = requirements;
     }
+
+    public Set<QuestionCategory> getQuestionCategoris() {
+        return questionCategoris;
+    }
+
+    public void setQuestionCategoris(Set<QuestionCategory> questionCategoris) {
+        this.questionCategoris = questionCategoris;
+    }
+
+ 
 
     
     
