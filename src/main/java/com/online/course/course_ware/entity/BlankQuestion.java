@@ -22,7 +22,8 @@ public class BlankQuestion implements Serializable{
     private Long blankQuestionId;
     @Column(name = "question_name")
     private String questionName;
-     @OneToOne(mappedBy = "blankQuestion")
+    
+   @OneToOne(mappedBy = "blankQuestion",fetch = FetchType.EAGER)
     private Answer answer; 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="question_category_id")
