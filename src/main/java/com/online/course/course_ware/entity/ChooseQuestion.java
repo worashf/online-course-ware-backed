@@ -7,9 +7,12 @@ package com.online.course.course_ware.entity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -32,7 +35,9 @@ public class ChooseQuestion  implements  Serializable{
      private String chooseD;
     @OneToOne(mappedBy = "chooseQuestion")
     private Answer answer;
-    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name ="question_category_id")
+    private QuestionCategory questionCategory;
     public Long getChooseQuestionId() {
         return chooseQuestionId;
     }
@@ -90,6 +95,16 @@ public class ChooseQuestion  implements  Serializable{
     public void setAnswer(Answer answer) {
         this.answer = answer;
     }
+
+    public QuestionCategory getQuestionCategory() {
+        return questionCategory;
+    }
+
+    public void setQuestionCategory(QuestionCategory questionCategory) {
+        this.questionCategory = questionCategory;
+    }
+
+
            
            
            
