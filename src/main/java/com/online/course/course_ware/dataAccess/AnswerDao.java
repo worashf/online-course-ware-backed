@@ -2,6 +2,7 @@
 package com.online.course.course_ware.dataAccess;
 
 import com.online.course.course_ware.entity.Answer;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +19,6 @@ public interface AnswerDao  extends JpaRepository<Answer, Long>{
      @Query("SELECT as FROM Answer as  JOIN  as.tfQuestion  tfq WHERE tfq.tfQuestionId=:tfQuestionId")
      Answer  findAnswerByTFQuestionId(@Param (value ="tfQuestionId") Long tfQuestionId); 
        
+         
+
 }
